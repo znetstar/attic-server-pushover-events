@@ -1,6 +1,6 @@
 {
     "name": "@znetstar/attic-server-pushover-events",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "",
     "main": "lib/Atticfile.js",
     "scripts": {

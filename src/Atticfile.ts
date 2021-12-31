@@ -1,12 +1,17 @@
 import {IApplicationContext, IConfig, IPlugin} from "@znetstar/attic-common/lib/Server";
 
 import { IError } from "@znetstar/attic-common/lib/Error";
-import {IEvent } from "@znetstar/attic-common";
+import {IEvent, IRPC } from "@znetstar/attic-common";
 import * as ejs from 'ejs';
+
+export type AtticPushoverRPCType = IRPC&{
+  pushover: (request: IPushoverRequest) => Promise<unknown>;
+};
 
 export type AtticPushoverEventsApplicationContext = IApplicationContext&{
     config: AtticPushoverEventsConfig;
     pushover: (request: IPushoverRequest) => Promise<unknown>;
+    rpcServer: { methods: AtticPushoverRPCType }
 }
 
 export type IPushoverRequest = {
@@ -67,7 +72,7 @@ export class AtticServerPushoverEvents implements IPlugin {
 
     public async init(): Promise<void> {
       const ctx = this.applicationContext;
-      ctx.pushover = this.pushover;
+      ctx.pushover = ctx.rpcServer.methods.pushover = this.pushover;
 
       for (const eventEntry of this.config.sendEventsToPushover || []) {
         ctx.registerHook(`events.${eventEntry.event}`, async (event: IEvent<unknown>) => {

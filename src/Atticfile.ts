@@ -92,4 +92,4 @@ export class AtticServerPushoverEvents implements IPlugin {
     }
 }
 
-export default AtticPushoverEventsApplicationContext;
+export default AtticServerPushoverEvents;
